@@ -1,0 +1,352 @@
+{
+	"info": {
+		"_postman_id": "dbad5cf8-0cf9-42c9-833e-7598ece23b8f",
+		"name": "Sentra Enterprise",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23158997",
+		"_collection_link": "https://interstellar-astronaut-476892.postman.co/workspace/Practice~baca5c9f-2bc5-4390-b115-2231a348d090/collection/23158997-dbad5cf8-0cf9-42c9-833e-7598ece23b8f?action=share&source=collection_link&creator=23158997"
+	},
+	"item": [
+		{
+			"name": "Admin Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is an object with ResponseObj property\", function () {\r",
+							"    pm.expect(pm.response.json()).to.be.an('object').that.has.property('ResponseObj');\r",
+							"});\r",
+							"\r",
+							"var jsondata = pm.response.json()\r",
+							"\r",
+							"//Full name validation\r",
+							"pm.test(\"Full name validation\", () => {\r",
+							"    pm.expect(jsondata.ResponseObj.User.FullName).to.eql(\"QA Administrator\");\r",
+							"});\r",
+							"\r",
+							"//Company validation\r",
+							"pm.test(\"Company validation\", () => {\r",
+							"    pm.expect(jsondata.ResponseObj.User.CompanyName).to.eql(\"NYBSYS QA\");\r",
+							"});\r",
+							"\r",
+							"//Message is success \r",
+							"pm.test(\"Message is success\", () => {\r",
+							"    pm.expect(jsondata.Message).to.eql(\"Success !\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userName\": \"admin@nq\",\r\n    \"password\": \"admin\",\r\n    \"userRoleId\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/security/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"security",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var fullname = pm.variables.replaceIn(\"{{$randomFullName}}\")\r",
+							"console.log(\"Fullname\" + fullname)\r",
+							"pm.environment.set(\"Fullname\", fullname)\r",
+							"\r",
+							"\r",
+							"var email = pm.variables.replaceIn(\"{{$randomEmail}}\")\r",
+							"console.log(\"Email\" + email)\r",
+							"pm.environment.set(\"Email\", email)\r",
+							"\r",
+							"var companyUserId = pm.variables.replaceIn(\"{{$randomInt}}\")\r",
+							"console.log(\"CompanyUserID\" + companyUserId)\r",
+							"pm.environment.set(\"CompanyUserID\", companyUserId)\r",
+							"\r",
+							"var PhoneCode = pm.variables.replaceIn(\"{{$randomInt}}\")\r",
+							"console.log(\"PhoneCode\" + PhoneCode)\r",
+							"pm.environment.set(\"PhoneCode\", PhoneCode)\r",
+							"\r",
+							"var PhoneCode = pm.variables.replaceIn(\"{{$randomInt}}\")\r",
+							"console.log(\"PhoneCode\" + PhoneCode)\r",
+							"pm.environment.set(\"PhoneCode\", PhoneCode)\r",
+							"\r",
+							"\r",
+							"var PhoneNo = pm.variables.replaceIn(\"{{$randomPhoneNumber}}\")\r",
+							"console.log(\"PhoneNo\" + PhoneNo)\r",
+							"pm.environment.set(\"PhoneNo\", PhoneNo)\r",
+							"\r",
+							"var PhoneNumber = pm.variables.replaceIn(\"{{$randomPhoneNumber}}\")\r",
+							"console.log(\"PhoneNumber\" + PhoneNumber)\r",
+							"pm.environment.set(\"PhoneNumber\", PhoneNumber)\r",
+							"\r",
+							"var PrimaryContactType = pm.variables.replaceIn(\"{{$randomInt}}\")\r",
+							"console.log(\"PrimaryContactType\" + PrimaryContactType)\r",
+							"pm.environment.set(\"PrimaryContactType\", PrimaryContactType)\r",
+							"\r",
+							"var Designation = pm.variables.replaceIn(\"{{$randomJobType}}\")\r",
+							"console.log(\"Designation\" + Designation)\r",
+							"pm.environment.set(\"Designation\", Designation)\r",
+							"\r",
+							"var UserRoleId = pm.variables.replaceIn(\"{{$randomInt}}\")\r",
+							"console.log(\"UserRoleId\" + UserRoleId)\r",
+							"pm.environment.set(\"UserRoleId\", UserRoleId)\r",
+							"\r",
+							"var PersonUniqueID = pm.variables.replaceIn(\"{{$randomInt}}\")\r",
+							"console.log(\"PersonUniqueID\" + UserRoleId)\r",
+							"pm.environment.set(\"PersonUniqueID\", PersonUniqueID)\r",
+							"\r",
+							"var RecordCount = pm.variables.replaceIn(\"{{$randomInt}}\")\r",
+							"console.log(\"RecordCount\" + RecordCount)\r",
+							"pm.environment.set(\"RecordCount\", RecordCount)\r",
+							"\r",
+							"\r",
+							"const moment = require('moment');\r",
+							"const today = moment();\r",
+							"pm.environment.set(\"UpdatedDate\", today.format(\"YYYY-MM-DD\"));\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"//Write a test case for Status Code Validation \r",
+							"pm.test(\"Status code is 200\", () =>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"\r",
+							"//Full Name  validation\r",
+							"pm.test(\"Full Name  validation\", () => {\r",
+							"    pm.expect(jsonData.ResponseObj.FullName).to.eql(pm.environment.get(\"Fullname\"));\r",
+							"})\r",
+							"\r",
+							"\r",
+							"//CompanyUserID validation\r",
+							"pm.test(\"CompanyUserID validation\", () => {\r",
+							"    pm.expect(jsonData.ResponseObj.CompanyUserID).to.eql(JSON.parse(pm.environment.get(\"CompanyUserID\")));\r",
+							"})\r",
+							"\r",
+							"//Email  validation\"\r",
+							"pm.test(\"Email  validation\", () => {\r",
+							"    pm.expect(jsonData.ResponseObj.Email).to.eql(pm.environment.get(\"Email\"));\r",
+							"})\r",
+							"\r",
+							"//Phone code  validation\r",
+							"pm.test(\"Phone code  validation\", () => {\r",
+							"    pm.expect(jsonData.ResponseObj.PhoneCode).to.eql(pm.environment.get(\"PhoneCode\"));\r",
+							"})\r",
+							"\r",
+							"//Phone no validation\r",
+							"pm.test(\"Phone no validation\", () => {\r",
+							"    pm.expect(jsonData.ResponseObj.PhoneNo).to.eql(pm.environment.get(\"PhoneNo\"));\r",
+							"})\r",
+							"\r",
+							"//Designation validation\r",
+							"pm.test(\"Designation validation\", () => {\r",
+							"    pm.expect(jsonData.ResponseObj.Designation).to.eql(pm.environment.get(\"Designation\"));\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxNCIsIkNvbXBhbnlVc2VySWQiOiI5NjY1IiwiVXNlck5hbWUiOiJhZG1pbiIsIlVzZXJUeXBlSWQiOiIyIiwiQ29tcGFueUlkIjoiOCIsIlNlc3Npb25JZCI6IjMwOTkiLCJJc1N1cGVyQWRtaW4iOiJGYWxzZSIsIkV4cGlyZXNEYXRlIjoiMTIvMjQvMjAyMyAxOTozNToyNCIsIklzc3VlZE9uIjoiMTIvMjMvMjAyMyAxNjo1NToyNCIsImp0aSI6IjIxMmFhNWJlLWUyYzgtNDUzMy05NTc4LTAzODUwNDg5ZDcxNCIsImV4cCI6MTcwMzQ0NjUyNH0.PqSLO69KfiezMV96UORFtrJBhx4dNqsxEqUlR0R9Lk8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"CompanyUserID\": {{CompanyUserID}},\r\n    \"CUID\": \"\",\r\n    \"FullName\": \"{{Fullname}}\",\r\n    \"PhoneCode\": \"{{PhoneCode}}\",\r\n    \"PhoneNo\": \"{{PhoneNo}}\",\r\n    \"PhoneNumber\": \"{{PhoneNumber}}\",\r\n    \"PrimaryContactType\": 0,\r\n    \"Email\": \"{{Email}}\",\r\n    \"UniqueID\": \"\",\r\n    \"Designation\": \"{{Designation}}\",\r\n    \"UserRoleId\": 4,\r\n    \"Priority\": 0,\r\n    \"IsRegistered\": false,\r\n    \"Company\": null,\r\n    \"CompanyId\": {{companyIdentity}},\r\n    \"Password\": \"\",\r\n    \"UserName\": \"\",\r\n    \"PrivateIdentity\": \"\",\r\n    \"PublicIdentity\": \"\",\r\n    \"Realm\": \"\",\r\n    \"SipPassword\": \"\",\r\n    \"DeviceID\": 0,\r\n    \"DeviceUniqueID\": \"0\",\r\n    \"DeviceName\": \"\",\r\n    \"DepartmentID\": 0,\r\n    \"SystemUser\": null,\r\n    \"ChannelUserPermissions\": [],\r\n    \"AgentSettings\": null,\r\n    \"ChannelActivitySettings\": null,\r\n    \"UserExtensions\": null,\r\n    \"ProfilePicSmall\": null,\r\n    \"CreatedDate\": \"2023-12-23T16:19:49.286252Z\",\r\n    \"CreatedBy\": \"admin\",\r\n    \"UpdatedBy\": \"admin\",\r\n    \"UpdatedDate\": \"{{UpdatedDate}}\",\r\n    \"Status\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/companyUser/saveUserMultipleDevice",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"companyUser",
+						"saveUserMultipleDevice"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Write a test case for Status Code Validation \r",
+							"pm.test(\"Status code is 200\", () =>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"var jsondata = pm.response.json()\r",
+							"\r",
+							"//Message is success \r",
+							"pm.test(\"Message is success\", () => {\r",
+							"    pm.expect(jsondata.Message).to.eql(\"Success!\");\r",
+							"});\r",
+							"\r",
+							"//Designation is QA\r",
+							"pm.test(\"Designation is QA\", () => {\r",
+							"    pm.expect(jsondata.ResponseObj.User.Designation).to.eql(\"QA\");\r",
+							"});\r",
+							"\r",
+							"//ChannelUserPermission is programmer\r",
+							"pm.test(\"Designation is programmer\", () => {\r",
+							"    pm.expect(jsondata.ResponseObj.ChannelUserPermissions[1].ChannelDisplayName).to.eql(\"Programmer\");\r",
+							"});\r",
+							"\r",
+							"//ChannelUserPermission is QA\r",
+							"pm.test(\"Designation is QA\", () => {\r",
+							"    pm.expect(jsondata.ResponseObj.ChannelUserPermissions[0].ChannelDisplayName).to.eql(\"NYBSYS QA\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/companyUser/details/1/9707",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"companyUser",
+						"details",
+						"1",
+						"9707"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/companyUser/deleteUser/9711",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"companyUser",
+						"deleteUser",
+						"9711"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://13.58.91.85:304/api\n",
+			"type": "string"
+		}
+	]
+}
